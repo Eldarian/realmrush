@@ -4,6 +4,23 @@ using UnityEngine;
 
 public class Waypoint : MonoBehaviour
 {
+    const int gridSize = 10;
+
+    public Waypoint previous;
+
+
+    public int GridSize => gridSize;
+    public Vector2Int GridPos
+    {
+        get
+        {
+            return new Vector2Int(
+            Mathf.RoundToInt(transform.position.x / gridSize),
+            Mathf.RoundToInt(transform.position.z / gridSize)
+            );
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -14,5 +31,11 @@ public class Waypoint : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void SetTopColor(Color color)
+    {
+        MeshRenderer renderer = transform.Find("Top").GetComponent<MeshRenderer>();
+        renderer.material.color = color;
     }
 }

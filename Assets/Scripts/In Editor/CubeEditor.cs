@@ -1,15 +1,23 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 
 
 [ExecuteInEditMode]
+[SelectionBase]
+[RequireComponent(typeof(Waypoint))]
 public class CubeEditor : MonoBehaviour
 {
     [SerializeField]
-    int gridSize = 10;
+    const int gridSize = 10;
     TMP_Text label;
+
+    Waypoint waypoint;
+
+
+    private void Awake()
+    {
+        waypoint = GetComponent<Waypoint>();
+    }
 
     void Start()
     {
@@ -19,11 +27,19 @@ public class CubeEditor : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float xRounded = Mathf.RoundToInt(transform.position.x/gridSize)*gridSize;
-        float zRounded = Mathf.RoundToInt(transform.position.z/gridSize)*gridSize;
-        string gridPos = (xRounded / gridSize).ToString() + "," + (zRounded / gridSize).ToString();
-        label.SetText(gridPos, true);
-        gameObject.name = gridPos;
-        transform.position = new Vector3(xRounded, transform.position.y, zRounded);
+        SnapToGrid();
+        UpdateLabel();
+    }
+
+    private void SnapToGrid()
+    {
+        transform.position = new Vector3(waypoint.GridPos.x, 0f, waypoint.GridPos.y) * gridSize;
+    }
+
+    private void UpdateLabel()
+    {
+        string gridPosString = (waypoint.GridPos.x).ToString() + "," + (waypoint.GridPos.y).ToString();
+        label.SetText(gridPosString, true);
+        gameObject.name = gridPosString;
     }
 }
