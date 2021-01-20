@@ -7,7 +7,7 @@ public class Waypoint : MonoBehaviour
     const int gridSize = 10;
 
     public Waypoint previous;
-
+    public bool isExplored = false;
 
     public int GridSize => gridSize;
     public Vector2Int GridPos
