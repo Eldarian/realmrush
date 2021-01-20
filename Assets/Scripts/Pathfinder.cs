@@ -12,7 +12,6 @@ public class Pathfinder : MonoBehaviour
 
     Queue<Waypoint> reachable = new Queue<Waypoint>();
     HashSet<Waypoint> cameFrom;
-    List<Waypoint> neighbours = new List<Waypoint>();
 
     List<Waypoint> path;
 
@@ -29,34 +28,32 @@ public class Pathfinder : MonoBehaviour
     {
         LoadBlocks();
         ColorBlocks();
-        //FindPath();
-        FindNeighbours(start);
+        FindPath();
 
     }
 
     private void FindPath()
     {
+        path = new List<Waypoint>();
         reachable.Enqueue(start); //adding first element to queue
         cameFrom = new HashSet<Waypoint>(); //initializing cameFrom set 
 
         while (reachable.Count>0) //if there is nowhere to go stop search
         {
-            ColorBlocks(); //repaint to default colours
 
+            ColorBlocks(); //repaint to default colours
             var current = reachable.Dequeue();
+            if (current == finish)
+            {
+                BuildPath();
+                return;
+            }
             //choose node
             List<Waypoint> neighbours = FindNeighbours(current); //find neighbours of current element
 
             foreach(Waypoint waypoint in neighbours) //for every neighbour
             {
                 waypoint.previous = current; //set current element as previous for every neighbour
-
-                //if goal node
-                if (waypoint == finish) 
-                {
-                    BuildPath();
-                    return;
-                }
                 reachable.Enqueue(waypoint); //add current element to queue
 
             }
@@ -69,6 +66,7 @@ public class Pathfinder : MonoBehaviour
 
     private void BuildPath()
     {
+        print("finish");
         Waypoint current = finish;
         while (current.previous != null)
         {
@@ -81,22 +79,18 @@ public class Pathfinder : MonoBehaviour
     //Iteration between possible neighbours
     private List<Waypoint> FindNeighbours(Waypoint waypoint)
     {
+        List<Waypoint> neighbours = new List<Waypoint>();
         foreach (Vector2Int direction in directions)
         {
-            CheckBlock(waypoint.GridPos + direction);
+            Vector2Int gridPos = waypoint.GridPos + direction;
+            if (grid.ContainsKey(gridPos) && !cameFrom.Contains(grid[gridPos]))
+            {
+                neighbours.Add(grid[gridPos]);
+                grid[gridPos].SetTopColor(Color.blue);
+            }
         }
 
         return neighbours;
-    }
-
-    //Check existance and non-discovery of block
-    private void CheckBlock(Vector2Int gridPos) 
-    {
-        if (grid.ContainsKey(gridPos) /*&& !cameFrom.Contains(grid[gridPos])*/)
-        {
-            neighbours.Add(grid[gridPos]);
-            grid[gridPos].SetTopColor(Color.blue);
-        }
     }
 
     private void ColorBlocks()
