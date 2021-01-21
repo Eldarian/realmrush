@@ -8,6 +8,12 @@ public class Waypoint : MonoBehaviour
 
     public Waypoint previous;
     public bool isExplored = false;
+    public BlockProperties properties;
+
+    private enum WaypointType { Friendly, Enemy, Neutral }
+
+    [SerializeField] WaypointType type = WaypointType.Neutral;
+    MeshFilter blockPrefab;
 
     public int GridSize => gridSize;
     public Vector2Int GridPos
@@ -24,7 +30,7 @@ public class Waypoint : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        UpdateMeshByType();
     }
 
     // Update is called once per frame
@@ -37,5 +43,22 @@ public class Waypoint : MonoBehaviour
     {
         MeshRenderer renderer = transform.Find("Top").GetComponent<MeshRenderer>();
         renderer.material.color = color;
+    }
+
+    public void UpdateMeshByType() //todo implement mesh update
+    {
+        blockPrefab = transform.Find("Block").GetComponent<MeshFilter>();
+        switch (type)
+        {
+            case WaypointType.Neutral:
+                blockPrefab.mesh = properties.neutral;
+                break;
+            case WaypointType.Friendly:
+                blockPrefab.mesh = properties.friend;
+                break;
+            case WaypointType.Enemy:
+                blockPrefab.mesh = properties.enemy;
+                break;
+        }
     }
 }

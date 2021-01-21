@@ -11,6 +11,8 @@ public class CubeEditor : MonoBehaviour
     const int gridSize = 10;
     TMP_Text label;
 
+  
+
     Waypoint waypoint;
 
 
@@ -29,6 +31,7 @@ public class CubeEditor : MonoBehaviour
     {
         SnapToGrid();
         UpdateLabel();
+        waypoint.UpdateMeshByType();
     }
 
     private void SnapToGrid()
@@ -42,4 +45,6 @@ public class CubeEditor : MonoBehaviour
         label.SetText(gridPosString, true);
         gameObject.name = gridPosString;
     }
+
+   
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,6 +7,7 @@ public class EnemyMovement : MonoBehaviour
 {
     [SerializeField] Waypoint currentPosition;
     [SerializeField] Waypoint destination;
+
 
     Pathfinder pathfinder;
 
@@ -22,8 +24,15 @@ public class EnemyMovement : MonoBehaviour
     {
         foreach (Waypoint waypoint in path)
         {
-            transform.position = waypoint.transform.position;
+            Transform nextStep = waypoint.transform;
+            if (transform.position != nextStep.position)
+            {
+                transform.LookAt(nextStep);
+            }
+            transform.position = nextStep.position;
             yield return new WaitForSeconds(0.5f);
         }
     }
+
+
 }
