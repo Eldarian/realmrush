@@ -19,6 +19,7 @@ public class CubeEditor : MonoBehaviour
     private void Awake()
     {
         waypoint = GetComponent<Waypoint>();
+        transform.parent = GameObject.Find("World").transform;
     }
 
     void Start()
