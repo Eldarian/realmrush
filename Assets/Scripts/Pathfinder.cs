@@ -7,8 +7,8 @@ public class Pathfinder : MonoBehaviour
 {
     Dictionary<Vector2Int, Waypoint> grid = new Dictionary<Vector2Int, Waypoint>();
 
-    [SerializeField] Waypoint start;
-    [SerializeField] Waypoint finish;
+    Waypoint start;
+    Waypoint finish;
 
     Queue<Waypoint> reachable = new Queue<Waypoint>();
 
@@ -22,50 +22,36 @@ public class Pathfinder : MonoBehaviour
         new Vector2Int(0, 1)
     };
 
-    // Start is called before the first frame update
-    void Start()
+    private void BreadthFirstSearch()
     {
-        LoadBlocks();
-        ColorBlocks();
-        StartCoroutine(FindPath());
-
-    }
-
-    private IEnumerator FindPath()
-    {
-        reachable.Enqueue(start); 
-
+        reachable.Enqueue(start);
+        print("finding path from" + start + " to " + finish);
         while (reachable.Count>0) //if there is nowhere to go stop search
         {
-
-            ColorBlocks(); //repaint to default colours
             var searchCenter = reachable.Dequeue();
-            searchCenter.SetTopColor(Color.magenta);
+            print(reachable.Count);
 
             if (searchCenter == finish)
             {
                 BuildPath();
-                yield break;
-            }
+                return;            }
             //choose node
-            List<Waypoint> neighbours = FindNeighbours(searchCenter); //find neighbours of current element
-
-            foreach(Waypoint waypoint in neighbours) //for every neighbour
-            {
-                waypoint.previous = searchCenter; //set current element as previous for every neighbour
-                waypoint.SetTopColor(Color.blue);
-                yield return new WaitForSeconds(0.5f);
-
-
-                reachable.Enqueue(waypoint); //add current element to queue
-
-            }
+            FindNeighbours(searchCenter); //find neighbours of current element
             searchCenter.isExplored = true;
         }
 
 
     }
 
+    public List<Waypoint> FindPath(Waypoint start, Waypoint finish)
+    {
+        this.start = start;
+        this.finish = finish;
+        LoadBlocks();
+        //ColorBlocks();
+        BreadthFirstSearch();
+        return path;
+    }
     private void BuildPath()
     {
         print("finish");
@@ -73,33 +59,36 @@ public class Pathfinder : MonoBehaviour
         while (current.previous != null)
         {
             path.Add(current);
-            current.SetTopColor(Color.white);
+            //current.SetTopColor(Color.white);
             current = current.previous;
         }
+        path.Add(start);
+        path.Reverse();
     }
 
     //Iteration between possible neighbours
-    private List<Waypoint> FindNeighbours(Waypoint waypoint)
+    private void FindNeighbours(Waypoint searchCenter)
     {
-        List<Waypoint> neighbours = new List<Waypoint>();
         foreach (Vector2Int direction in directions)
         {
-            try
+            Vector2Int neighbourCoordinates = searchCenter.GridPos + direction;
+            if (grid.ContainsKey(neighbourCoordinates))
             {
-                Vector2Int neighbourCoordinates = waypoint.GridPos + direction;
-                Waypoint neighbour = grid[neighbourCoordinates];
-                if (grid.ContainsKey(neighbourCoordinates) && !neighbour.isExplored)
-                {
-                    neighbours.Add(grid[neighbourCoordinates]);
-                }
-            }
-            catch
-            {
-
+                EnqueueNeighbour(searchCenter, neighbourCoordinates);
             }
         }
 
-        return neighbours;
+        return;
+    }
+
+    private void EnqueueNeighbour(Waypoint searchCenter, Vector2Int neighbourCoordinates)
+    {
+        Waypoint neighbour = grid[neighbourCoordinates];
+        if (!reachable.Contains(neighbour) && !neighbour.isExplored)
+        {
+            neighbour.previous = searchCenter; //set current element as previous for every neighbour
+            reachable.Enqueue(neighbour); //add current element to queue
+        }
     }
 
     private void ColorBlocks()
