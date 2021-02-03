@@ -22,6 +22,7 @@ public class EnemyMovement : MonoBehaviour
 
     IEnumerator GoThroughPath(List<Waypoint> path)
     {
+        print(gameObject.name + " started");
         foreach (Waypoint waypoint in path)
         {
             Transform nextStep = waypoint.transform;
@@ -29,10 +30,13 @@ public class EnemyMovement : MonoBehaviour
             {
                 transform.LookAt(nextStep);
             }
+
             transform.position = nextStep.position;
             yield return new WaitForSeconds(0.5f);
         }
     }
+
+
 
 
 }

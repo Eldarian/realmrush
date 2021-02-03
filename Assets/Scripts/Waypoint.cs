@@ -10,6 +10,10 @@ public class Waypoint : MonoBehaviour
     public bool isExplored = false;
     public BlockProperties properties;
 
+    [SerializeField] GameObject towerPrefab;
+
+    GameObject top;
+
     private enum WaypointType { Friendly, Enemy, Neutral }
 
     [SerializeField] WaypointType type = WaypointType.Neutral;
@@ -31,6 +35,7 @@ public class Waypoint : MonoBehaviour
     void Start()
     {
         UpdateMeshByType();
+        top = transform.Find("Top").gameObject;
     }
 
     // Update is called once per frame
@@ -61,4 +66,9 @@ public class Waypoint : MonoBehaviour
                 break;
         }
     }
+
+   /* private void OnMouseDown()
+    {
+        Instantiate(towerPrefab, top.transform.position, towerPrefab.transform.rotation);
+    }*/
 }

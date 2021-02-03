@@ -29,7 +29,7 @@ public class Pathfinder : MonoBehaviour
         while (reachable.Count>0) //if there is nowhere to go stop search
         {
             var searchCenter = reachable.Dequeue();
-            print(reachable.Count);
+            print(gameObject.name + " " + reachable.Count);
 
             if (searchCenter == finish)
             {
@@ -106,6 +106,8 @@ public class Pathfinder : MonoBehaviour
         var waypoints = FindObjectsOfType<Waypoint>();
         foreach (Waypoint waypoint in waypoints)
         {
+            waypoint.previous = null;
+            waypoint.isExplored = false;
             bool isOverlapping = grid.ContainsKey(waypoint.GridPos);
             if (!isOverlapping)
             {
