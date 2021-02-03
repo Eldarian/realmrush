@@ -37,6 +37,11 @@ public class EnemyMovement : MonoBehaviour
     }
 
 
+    public void SetStartEnd(Waypoint start, Waypoint end)
+    {
+        currentPosition = start;
+        destination = end;
+    }
 
 
 }
