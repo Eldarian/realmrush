@@ -28,7 +28,6 @@ public class Pathfinder : MonoBehaviour
         while (reachable.Count>0) //if there is nowhere to go stop search
         {
             var searchCenter = reachable.Dequeue();
-            print(gameObject.name + " " + reachable.Count);
 
             if (searchCenter == finish)
             {
@@ -56,7 +55,6 @@ public class Pathfinder : MonoBehaviour
         while (current.previous != null)
         {
             path.Add(current);
-            //current.SetTopColor(Color.white);
             current = current.previous;
         }
         path.Add(start);
@@ -105,7 +103,6 @@ public class Pathfinder : MonoBehaviour
                 Debug.LogWarning("Blocks are overlapping on " + waypoint.GridPos);
             }
         }
-        print(grid.Count);
     }
 
 }
