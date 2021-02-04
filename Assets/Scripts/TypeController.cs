@@ -7,7 +7,7 @@ public class TypeController : MonoBehaviour
     private enum WaypointType { Friendly, Enemy, Neutral }
     [SerializeField] WaypointType type = WaypointType.Neutral;
     MeshFilter blockPrefab;
-    public BlockProperties properties;
+    [SerializeField] BlockProperties properties;
 
     public void UpdateMeshByType() //todo implement mesh update
     {

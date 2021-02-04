@@ -8,8 +8,10 @@ public class Waypoint : MonoBehaviour
 
     public Waypoint previous;
     public bool isExplored = false;
-
     [SerializeField] GameObject towerPrefab;
+
+    bool isPlaceable = true;
+
 
     public int GridSize => gridSize;
     public Vector2Int GridPos
@@ -25,10 +27,11 @@ public class Waypoint : MonoBehaviour
 
    private void OnMouseOver()
    {
-        if(Input.GetMouseButtonDown(0))
+        if(Input.GetMouseButtonDown(0) && isPlaceable)
         {
             var tower = Instantiate(towerPrefab, transform.position, towerPrefab.transform.rotation);
             tower.GetComponent<Tower>().objectToPan = transform;
+            isPlaceable = false;
         }
    }
 }
