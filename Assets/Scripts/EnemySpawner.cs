@@ -6,13 +6,11 @@ public class EnemySpawner : MonoBehaviour
 {
     [SerializeField] float secindsBetweenSpawns = 2f;
     [SerializeField] EnemyMovement enemyPrefab;
-    Transform enemyParent;
     [SerializeField] Waypoint start, end;
 
     // Start is called before the first frame update
     void Start()
     {
-        enemyParent = GameObject.Find("Enemies").transform;
         StartCoroutine("SpawnEnemies");
     }
 
@@ -26,7 +24,7 @@ public class EnemySpawner : MonoBehaviour
     {
         for(int i = 0; i < 5; i++)
         {
-            GameObject enemy = Instantiate(enemyPrefab.gameObject, enemyParent);
+            GameObject enemy = Instantiate(enemyPrefab.gameObject, transform);
             EnemyMovement enemyMove = enemy.GetComponent<EnemyMovement>();
             enemyMove.SetStartEnd(start, end);
 
