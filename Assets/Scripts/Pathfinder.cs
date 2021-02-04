@@ -25,7 +25,6 @@ public class Pathfinder : MonoBehaviour
     private void BreadthFirstSearch()
     {
         reachable.Enqueue(start);
-        print("finding path from" + start + " to " + finish);
         while (reachable.Count>0) //if there is nowhere to go stop search
         {
             var searchCenter = reachable.Dequeue();
@@ -48,13 +47,11 @@ public class Pathfinder : MonoBehaviour
         this.start = start;
         this.finish = finish;
         LoadBlocks();
-        //ColorBlocks();
         BreadthFirstSearch();
         return path;
     }
     private void BuildPath()
     {
-        print("finish");
         Waypoint current = finish;
         while (current.previous != null)
         {
@@ -89,16 +86,6 @@ public class Pathfinder : MonoBehaviour
             neighbour.previous = searchCenter; //set current element as previous for every neighbour
             reachable.Enqueue(neighbour); //add current element to queue
         }
-    }
-
-    private void ColorBlocks()
-    {
-        foreach(Waypoint waypoint in grid.Values)
-        {
-            waypoint.SetTopColor(Color.cyan);
-        }
-        start.SetTopColor(Color.green);
-        finish.SetTopColor(Color.red);
     }
 
     private void LoadBlocks()

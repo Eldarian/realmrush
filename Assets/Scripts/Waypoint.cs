@@ -8,16 +8,12 @@ public class Waypoint : MonoBehaviour
 
     public Waypoint previous;
     public bool isExplored = false;
-    public BlockProperties properties;
+
+
 
     [SerializeField] GameObject towerPrefab;
 
-    GameObject top;
 
-    private enum WaypointType { Friendly, Enemy, Neutral }
-
-    [SerializeField] WaypointType type = WaypointType.Neutral;
-    MeshFilter blockPrefab;
 
     public int GridSize => gridSize;
     public Vector2Int GridPos
@@ -31,44 +27,16 @@ public class Waypoint : MonoBehaviour
         }
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        UpdateMeshByType();
-        top = transform.Find("Top").gameObject;
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
-    public void SetTopColor(Color color)
+   private void OnMouseOver()
     {
-        MeshRenderer renderer = transform.Find("Top").GetComponent<MeshRenderer>();
-        renderer.material.color = color;
-    }
-
-    public void UpdateMeshByType() //todo implement mesh update
-    {
-        blockPrefab = transform.Find("Block").GetComponent<MeshFilter>();
-        switch (type)
+        print(gameObject.name);
+        if(Input.GetMouseButtonDown(0))
         {
-            case WaypointType.Neutral:
-                blockPrefab.mesh = properties.neutral;
-                break;
-            case WaypointType.Friendly:
-                blockPrefab.mesh = properties.friend;
-                break;
-            case WaypointType.Enemy:
-                blockPrefab.mesh = properties.enemy;
-                break;
+            print(" clicked");
+            var tower = Instantiate(towerPrefab, transform.position, towerPrefab.transform.rotation);
+            tower.GetComponent<Tower>().objectToPan = transform;
         }
     }
-
-   /* private void OnMouseDown()
-    {
-        Instantiate(towerPrefab, top.transform.position, towerPrefab.transform.rotation);
-    }*/
 }

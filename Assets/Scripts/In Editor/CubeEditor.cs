@@ -11,15 +11,14 @@ public class CubeEditor : MonoBehaviour
     const int gridSize = 10;
     TMP_Text label;
 
-  
-
     Waypoint waypoint;
+    TypeController typeController;
 
 
     private void Awake()
     {
         waypoint = GetComponent<Waypoint>();
-        transform.parent = GameObject.Find("World").transform;
+        typeController = GetComponent<TypeController>();
     }
 
     void Start()
@@ -32,7 +31,8 @@ public class CubeEditor : MonoBehaviour
     {
         SnapToGrid();
         UpdateLabel();
-        waypoint.UpdateMeshByType();
+        typeController.UpdateMeshByType();
+
     }
 
     private void SnapToGrid()

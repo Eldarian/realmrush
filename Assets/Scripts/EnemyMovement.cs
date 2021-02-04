@@ -22,7 +22,6 @@ public class EnemyMovement : MonoBehaviour
 
     IEnumerator GoThroughPath(List<Waypoint> path)
     {
-        print(gameObject.name + " started");
         foreach (Waypoint waypoint in path)
         {
             Transform nextStep = waypoint.transform;

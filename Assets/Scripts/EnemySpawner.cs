@@ -24,7 +24,7 @@ public class EnemySpawner : MonoBehaviour
 
     IEnumerator SpawnEnemies()
     {
-        while(true)
+        for(int i = 0; i < 5; i++)
         {
             GameObject enemy = Instantiate(enemyPrefab.gameObject, enemyParent);
             EnemyMovement enemyMove = enemy.GetComponent<EnemyMovement>();

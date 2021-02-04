@@ -7,61 +7,65 @@ public class Tower : MonoBehaviour
 {
     Transform top;
     [SerializeField] GameObject gun;
-    AudioSource laserShot;
-    [SerializeField] Transform objectToPan;
+    public Transform objectToPan;
 
-    [SerializeField] float timeSchedule = 2f;
+    [SerializeField] float timeSchedule = 1.5f;
+    [SerializeField] float towerRange = 30f;
+
     //public GameObject closest;
     // Start is called before the first frame update
     void Start()
     {
         transform.position = objectToPan.position;
-
-
-
         var emission = gun.GetComponent<ParticleSystem>().emission;
         emission.rateOverTime = timeSchedule;
         
-        laserShot = GetComponent<AudioSource>();
-        top = transform.Find("Tower A Top");
         
+    }
+
+    private void Awake()
+    {
+        top = transform.Find("Tower A Top");
+
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        List<GameObject> enemies = GameObject.FindGameObjectsWithTag("Enemy").ToList();
-        if (enemies.Count > 0)
-        {
-            var closest = enemies.First(
-                enemy1 => DistanceTo(enemy1) - enemies.Min(enemy2 => DistanceTo(enemy2)) < Mathf.Epsilon);
-            LookAtEnemy(closest);
-        } else
-        {
-            LookAtEnemy(null);
-        }
-
-
+        LookAtEnemy(GetAim());
     }
 
     void LookAtEnemy(GameObject enemy)
     {
-        var bulletsEmission = gun.GetComponent<ParticleSystem>().emission;
         if (enemy != null)
         {
             top.LookAt(enemy.transform.position);
-            bulletsEmission.enabled = true;
-            if (!laserShot.isPlaying)
-            {
-                laserShot.PlayScheduled(timeSchedule);
-            }
+            gun.SetActive(true);
 
         }
         else
         {
-            bulletsEmission.enabled = false;
-            laserShot.Stop();
+            gun.SetActive(false);
         }
+    }
+
+
+    GameObject GetAim() //TODO Stop search of closest out of range (?)
+    {
+        var enemies = GameObject.FindGameObjectsWithTag("Enemy")
+                                .Where(enemy => DistanceTo(enemy) <= towerRange)
+                                .ToList();
+        if (enemies.Count > 0)
+        {
+            return GetClosestEnemy(enemies);
+        }
+        return null;
+    }
+
+    private GameObject GetClosestEnemy(List<GameObject> enemies)
+    {
+        return enemies.Aggregate((enemy1, enemy2) => DistanceTo(enemy1) <= DistanceTo(enemy2) ? enemy1 : enemy2);
     }
 
     float DistanceTo(GameObject aim)
