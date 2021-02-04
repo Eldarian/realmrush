@@ -1064,6 +1064,10 @@ PrefabInstance:
       propertyPath: type
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3246421062447009452, guid: 7b7c008d8b7d9614ea6bd37f153f72b6, type: 3}
+      propertyPath: towerPrefab
+      value: 
+      objectReference: {fileID: 7799531388636184635, guid: 29f73782f0e18954689803841f7a08ae, type: 3}
     - target: {fileID: 3768474908111985683, guid: 7b7c008d8b7d9614ea6bd37f153f72b6, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -1600,7 +1604,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51a51f1edc88e1c4cba4ba0fa7cc1962, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  secondsBetweenSpawns: 1
+  secindsBetweenSpawns: 2
   enemyPrefab: {fileID: 402598878659570362, guid: 989c59232f00a324287a2f555b270fa4, type: 3}
   start: {fileID: 1066908983}
   end: {fileID: 1645827121}

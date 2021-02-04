@@ -8,7 +8,7 @@ public class Waypoint : MonoBehaviour
 
     public Waypoint previous;
     public bool isExplored = false;
-    [SerializeField] GameObject towerPrefab;
+    [SerializeField] Tower towerPrefab;
 
     bool isPlaceable = true;
 
