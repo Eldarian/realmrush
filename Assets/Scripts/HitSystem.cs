@@ -25,7 +25,7 @@ public class HitSystem : MonoBehaviour
     private void OnParticleCollision(GameObject other)
     {
         HandleHit();
-        print(gameObject.name + " hit!");
+        //print(gameObject.name + " hit!");
         hitParticles.Play();
     }
 
