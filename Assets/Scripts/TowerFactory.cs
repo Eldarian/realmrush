@@ -15,7 +15,8 @@ public class TowerFactory : MonoBehaviour
 
         if(numTowers == towerLimit)
         {
-            MoveExistingTower(waypoint);
+            var tower = towers.Dequeue();
+            MoveExistingTower(tower, waypoint);
         }
         else
         {
@@ -23,19 +24,24 @@ public class TowerFactory : MonoBehaviour
         }
     }
 
-    private void MoveExistingTower(Waypoint waypoint)
+    private void MoveExistingTower(Tower tower, Waypoint waypoint)
     {
-        Debug.Log("Max Towers Reached");
-        Destroy(towers.Dequeue().gameObject);
-        AddTower(waypoint);
+        var oldWaypoint = tower.objectToPan;
+        if (oldWaypoint != null)
+        {
+            oldWaypoint.GetComponent<Waypoint>().isPlaceable = true;
+        }
+
+        tower.objectToPan = waypoint.transform;
+        tower.transform.position = waypoint.transform.position;
+        towers.Enqueue(tower);
+        waypoint.isPlaceable = false;
+
     }
 
     void InstantiateTower(Waypoint waypoint)
     {
         var tower = Instantiate(towerPrefab, waypoint.transform.position, towerPrefab.transform.rotation);
-        tower.GetComponent<Tower>().objectToPan = waypoint.transform;
-        waypoint.isPlaceable = false;
-
-        towers.Enqueue(tower);
+        MoveExistingTower(tower, waypoint);
     }
 }
