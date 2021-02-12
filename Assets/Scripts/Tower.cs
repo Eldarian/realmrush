@@ -50,8 +50,7 @@ public class Tower : MonoBehaviour
         }
     }
 
-
-    GameObject GetAim() //TODO Stop search of closest out of range (?)
+    GameObject GetAim()
     {
         var enemies = GameObject.FindGameObjectsWithTag("Enemy")
                                 .Where(enemy => DistanceTo(enemy) <= towerRange)

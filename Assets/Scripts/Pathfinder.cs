@@ -37,8 +37,6 @@ public class Pathfinder : MonoBehaviour
             FindNeighbours(searchCenter); //find neighbours of current element
             searchCenter.isExplored = true;
         }
-
-
     }
 
     public List<Waypoint> FindPath(Waypoint start, Waypoint finish)
@@ -94,6 +92,7 @@ public class Pathfinder : MonoBehaviour
             waypoint.previous = null;
             waypoint.isExplored = false;
             bool isOverlapping = grid.ContainsKey(waypoint.GridPos);
+
             if (!isOverlapping)
             {
                 grid.Add(waypoint.GridPos, waypoint);
