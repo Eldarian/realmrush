@@ -41,7 +41,11 @@ public class HitSystem : MonoBehaviour
 
     private void HandleDeath()
     {
-        explodeParticles.Play();
-        Destroy(gameObject, 0.5f);
+        var explode = Instantiate(explodeParticles, transform.position, Quaternion.identity, transform.parent);
+        var exp = explode.main;
+        exp.duration = 0.3f;
+        explode.Play();
+        Destroy(explode.gameObject, 1f);
+        Destroy(gameObject);
     }
 }

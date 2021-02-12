@@ -5,23 +5,18 @@ using UnityEngine;
 public class TowerFactory : MonoBehaviour
 {
     [SerializeField] int towerLimit = 5;
-    Queue<Tower> towers = new Queue<Tower>();
     [SerializeField] Tower towerPrefab;
+    [SerializeField] GameObject towersParent;
+
+    Queue<Tower> towers = new Queue<Tower>();
+
 
     public void AddTower(Waypoint waypoint)
     {
-        //var towers = FindObjectsOfType<Tower>();
         int numTowers = towers.Count;
 
-        if(numTowers == towerLimit)
-        {
-            var tower = towers.Dequeue();
-            MoveExistingTower(tower, waypoint);
-        }
-        else
-        {
-            InstantiateTower(waypoint);
-        }
+        var tower = (numTowers < towerLimit) ? InstantiateTower(waypoint) : towers.Dequeue();
+        MoveExistingTower(tower, waypoint);
     }
 
     private void MoveExistingTower(Tower tower, Waypoint waypoint)
@@ -30,18 +25,17 @@ public class TowerFactory : MonoBehaviour
         if (oldWaypoint != null)
         {
             oldWaypoint.GetComponent<Waypoint>().isPlaceable = true;
+            tower.transform.position = waypoint.transform.position;
         }
 
-        tower.objectToPan = waypoint.transform;
-        tower.transform.position = waypoint.transform.position;
-        towers.Enqueue(tower);
         waypoint.isPlaceable = false;
+        tower.objectToPan = waypoint.transform;
+        towers.Enqueue(tower);
 
     }
 
-    void InstantiateTower(Waypoint waypoint)
+    Tower InstantiateTower(Waypoint waypoint)
     {
-        var tower = Instantiate(towerPrefab, waypoint.transform.position, towerPrefab.transform.rotation);
-        MoveExistingTower(tower, waypoint);
+        return Instantiate(towerPrefab, waypoint.transform.position, towerPrefab.transform.rotation, towersParent.transform);
     }
 }
