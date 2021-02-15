@@ -27,11 +27,11 @@ public class Pathfinder : MonoBehaviour
     {
         LoadBlocks();
         ColorBlocks();
-        FindPath();
+        StartCoroutine(FindPath());
 
     }
 
-    private void FindPath()
+    private IEnumerator FindPath()
     {
         reachable.Enqueue(start); 
 
@@ -45,43 +45,25 @@ public class Pathfinder : MonoBehaviour
             if (searchCenter == finish)
             {
                 BuildPath();
-                return;
+                yield break;
             }
             //choose node
-            FindNeighbours(searchCenter); //find neighbours of current element
+            List<Waypoint> neighbours = FindNeighbours(searchCenter); //find neighbours of current element
 
+            foreach(Waypoint waypoint in neighbours) //for every neighbour
+            {
+                waypoint.previous = searchCenter; //set current element as previous for every neighbour
+                waypoint.SetTopColor(Color.blue);
+                yield return new WaitForSeconds(0.5f);
+
+
+                reachable.Enqueue(waypoint); //add current element to queue
+
+            }
             searchCenter.isExplored = true;
         }
 
 
-    }
-
-    //Iteration between possible neighbours
-    private void FindNeighbours(Waypoint searchCenter)
-    {
-        foreach (Vector2Int direction in directions)
-        {
-            Vector2Int neighbourCoordinates = searchCenter.GridPos + direction;
-
-            try
-            {
-                CheckBlock(searchCenter, neighbourCoordinates);
-            }
-            catch {}
-        }
-
-    }
-
-    private void CheckBlock(Waypoint searchCenter, Vector2Int neighbourCoordinates)
-    {
-        print(neighbourCoordinates);
-        Waypoint neighbour = grid[neighbourCoordinates];
-        if (!neighbour.isExplored)
-        {
-            searchCenter.previous = searchCenter; //set current element as previous for every neighbour
-            searchCenter.SetTopColor(Color.blue);
-            reachable.Enqueue(searchCenter); //add current element to queue
-        }
     }
 
     private void BuildPath()
@@ -94,6 +76,30 @@ public class Pathfinder : MonoBehaviour
             current.SetTopColor(Color.white);
             current = current.previous;
         }
+    }
+
+    //Iteration between possible neighbours
+    private List<Waypoint> FindNeighbours(Waypoint waypoint)
+    {
+        List<Waypoint> neighbours = new List<Waypoint>();
+        foreach (Vector2Int direction in directions)
+        {
+            try
+            {
+                Vector2Int neighbourCoordinates = waypoint.GridPos + direction;
+                Waypoint neighbour = grid[neighbourCoordinates];
+                if (grid.ContainsKey(neighbourCoordinates) && !neighbour.isExplored)
+                {
+                    neighbours.Add(grid[neighbourCoordinates]);
+                }
+            }
+            catch
+            {
+
+            }
+        }
+
+        return neighbours;
     }
 
     private void ColorBlocks()
