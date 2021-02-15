@@ -8,6 +8,10 @@ public class Waypoint : MonoBehaviour
 
     public Waypoint previous;
     public bool isExplored = false;
+    [SerializeField] Tower towerPrefab;
+
+    public bool isPlaceable = true;
+
 
     public int GridSize => gridSize;
     public Vector2Int GridPos
@@ -21,21 +25,11 @@ public class Waypoint : MonoBehaviour
         }
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    public void SetTopColor(Color color)
-    {
-        MeshRenderer renderer = transform.Find("Top").GetComponent<MeshRenderer>();
-        renderer.material.color = color;
-    }
+   private void OnMouseOver()
+   {
+        if(Input.GetMouseButtonDown(0) && isPlaceable)
+        {
+            FindObjectOfType<TowerFactory>().AddTower(this);
+        }
+   }
 }

@@ -12,11 +12,13 @@ public class CubeEditor : MonoBehaviour
     TMP_Text label;
 
     Waypoint waypoint;
+    TypeController typeController;
 
 
     private void Awake()
     {
         waypoint = GetComponent<Waypoint>();
+        typeController = GetComponent<TypeController>();
     }
 
     void Start()
@@ -29,6 +31,8 @@ public class CubeEditor : MonoBehaviour
     {
         SnapToGrid();
         UpdateLabel();
+        typeController.UpdateMeshByType();
+
     }
 
     private void SnapToGrid()
@@ -42,4 +46,6 @@ public class CubeEditor : MonoBehaviour
         label.SetText(gridPosString, true);
         gameObject.name = gridPosString;
     }
+
+   
 }
